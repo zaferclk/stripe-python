@@ -3,39 +3,37 @@
 from __future__ import absolute_import, division, print_function
 
 from stripe import six, StripeError
-from tests.helper import StripeTestCase
 
 
-class StripeErrorTests(StripeTestCase):
-
+class TestError(object):
     def test_formatting(self):
         err = StripeError(u'öre')
-        self.assertEqual(u'öre', six.text_type(err))
+        assert six.text_type(err) == u'öre'
         if six.PY2:
-            self.assertEqual('\xc3\xb6re', str(err))
+            assert str(err) == '\xc3\xb6re'
         else:
-            self.assertEqual(u'öre', str(err))
+            assert str(err) == u'öre'
 
     def test_formatting_with_request_id(self):
         err = StripeError(u'öre', headers={'request-id': '123'})
-        self.assertEqual(u'Request 123: öre', six.text_type(err))
+        assert six.text_type(err) == u'Request 123: öre'
         if six.PY2:
-            self.assertEqual('Request 123: \xc3\xb6re', str(err))
+            assert str(err) == 'Request 123: \xc3\xb6re'
         else:
-            self.assertEqual(u'Request 123: öre', str(err))
+            assert str(err) == u'Request 123: öre'
 
     def test_formatting_with_message_none_and_request_id(self):
         err = StripeError(None, headers={'request-id': '123'})
-        self.assertEqual(u'Request 123: <empty message>', six.text_type(err))
+        assert six.text_type(err) == u'Request 123: <empty message>'
         if six.PY2:
-            self.assertEqual('Request 123: <empty message>', str(err))
+            assert str(err) == 'Request 123: <empty message>'
         else:
-            self.assertEqual('Request 123: <empty message>', str(err))
+            assert str(err) == 'Request 123: <empty message>'
 
     def test_formatting_with_message_none_and_request_id_none(self):
         err = StripeError(None)
-        self.assertEqual(u'<empty message>', six.text_type(err))
+        assert six.text_type(err) == u'<empty message>'
         if six.PY2:
-            self.assertEqual('<empty message>', str(err))
+            assert str(err) == '<empty message>'
         else:
-            self.assertEqual('<empty message>', str(err))
+            assert str(err) == u'<empty message>'
